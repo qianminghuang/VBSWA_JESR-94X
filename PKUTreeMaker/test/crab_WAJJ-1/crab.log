@@ -1,0 +1,163 @@
+DEBUG 2019-11-16 09:56:16.289 UTC: 	 Running on: Linux lxplus600.cern.ch 2.6.32-754.23.1.el6.x86_64 #1 SMP Thu Sep 26 11:57:28 CEST 2019 x86_64 x86_64 x86_64 GNU/Linux - Scientific Linux CERN SLC release 6.10 (Carbon)
+DEBUG 2019-11-16 09:56:16.317 UTC: 	 OpenSSl version: OpenSSL 1.0.1e-fips 11 Feb 2013
+DEBUG 2019-11-16 09:56:16.318 UTC: 	 Executing command: 'submit'
+DEBUG 2019-11-16 09:56:16.318 UTC: 	 Found CRAB cache file /afs/cern.ch/user/q/qihuang/.crab3
+DEBUG 2019-11-16 09:56:16.329 UTC: 	 Checking credentials
+DEBUG 2019-11-16 09:56:16.330 UTC: 	 Found proxy file /tmp/x509up_u91611
+DEBUG 2019-11-16 09:56:16.330 UTC: 	 Getting proxy life time left
+DEBUG 2019-11-16 09:56:17.341 UTC: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u91611 -timeleft
+ output : 86231
+
+ error: 
+ retcode : 0
+DEBUG 2019-11-16 09:56:18.150 UTC: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u91611 -actimeleft
+ output : 86230
+
+ error: 
+ retcode : 0
+DEBUG 2019-11-16 09:56:18.151 UTC: 	 Proxy lifetime 86231 secs is different from voms extension lifetime 86230 secs for proxy: /tmp/x509up_u91611
+DEBUG 2019-11-16 09:56:18.151 UTC: 	 Proxy valid for 23:57:10 hours
+INFO 2019-11-16 09:56:18.152 UTC: 	 Will use CRAB configuration file ./Wcrab/crab3_analysisWAJJ.py
+DEBUG 2019-11-16 09:56:18.152 UTC: 	 Loading CRAB configuration file.
+DEBUG 2019-11-16 09:56:18.159 UTC: 	 Will use CRAB Analysis plugin (i.e. will run an analysis job type).
+DEBUG 2019-11-16 09:56:18.286 UTC: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=qihuang/CN=792748/CN=Qianming Huang
+
+ error: 
+ retcode : 0
+DEBUG 2019-11-16 09:56:18.287 UTC: 	 Checking credentials
+DEBUG 2019-11-16 09:56:18.287 UTC: 	 Found proxy file /tmp/x509up_u91611
+DEBUG 2019-11-16 09:56:18.287 UTC: 	 Getting proxy life time left
+DEBUG 2019-11-16 09:56:19.094 UTC: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u91611 -timeleft
+ output : 86229
+
+ error: 
+ retcode : 0
+DEBUG 2019-11-16 09:56:19.902 UTC: 	 Executing : 
+ command : voms-proxy-info -file /tmp/x509up_u91611 -actimeleft
+ output : 86229
+
+ error: 
+ retcode : 0
+DEBUG 2019-11-16 09:56:19.903 UTC: 	 Proxy valid for 23:57:09 hours
+DEBUG 2019-11-16 09:56:21.812 UTC: 	 Executing : 
+ command : env X509_USER_PROXY=/tmp/x509up_u91611 voms-proxy-info -fqan
+ output : /cms/Role=NULL/Capability=NULL
+
+ error: 
+ retcode : 0
+DEBUG 2019-11-16 09:56:21.959 UTC: 	 Registering user credentials for server /DC=ch/DC=cern/OU=computers/CN=vocms(052|058|030|0118|0105|0109).cern.ch|/DC=ch/DC=cern/OU=computers/CN=crab-(preprod|prod)-tw(02|01).cern.ch
+DEBUG 2019-11-16 09:56:22.074 UTC: 	 Executing : 
+ command : openssl x509 -in ~/.globus/usercert.pem -subject -noout
+ output : subject= /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=qihuang/CN=792748/CN=Qianming Huang
+
+ error: 
+ retcode : 0
+DEBUG 2019-11-16 09:56:22.075 UTC: 	 Getting myproxy life time left for myproxy.cern.ch
+DEBUG 2019-11-16 09:56:22.075 UTC: 	 Calculating hash of /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=qihuang/CN=792748/CN=Qianming Huang_cmsweb.cern.ch for credential name
+DEBUG 2019-11-16 09:56:22.281 UTC: 	 Executing : 
+ command : myproxy-info -l bd26cad5a14f4cd955c7675bb9df4a79ab639461 -s myproxy.cern.ch
+ output : username: bd26cad5a14f4cd955c7675bb9df4a79ab639461
+owner: /DC=ch/DC=cern/OU=Organic Units/OU=Users/CN=qihuang/CN=792748/CN=Qianming Huang
+  renewal policy: /DC=ch/DC=cern/OU=computers/CN=vocms(052|058|030|0118|0105|0109).cern.ch|/DC=ch/DC=cern/OU=computers/CN=crab-(preprod|prod)-tw(02|01).cern.ch
+  trusted retrieval policy: /DC=ch/DC=cern/OU=computers/CN=vocms(052|058|030|0118|0105|0109).cern.ch|/DC=ch/DC=cern/OU=computers/CN=crab-(preprod|prod)-tw(02|01).cern.ch
+  timeleft: 534:12:36  (22.3 days)
+
+ error: 
+ retcode : 0
+DEBUG 2019-11-16 09:56:22.283 UTC: 	 Myproxy is valid: 1923156
+DEBUG 2019-11-16 09:56:22.283 UTC: 	 Command use: submit
+DEBUG 2019-11-16 09:56:22.283 UTC: 	 Options use: ['-c', './Wcrab/crab3_analysisWAJJ.py']
+DEBUG 2019-11-16 09:56:22.448 UTC: 	 CRABClient version: 3.3.1911
+DEBUG 2019-11-16 09:56:22.448 UTC: 	 Instance is prod
+DEBUG 2019-11-16 09:56:22.448 UTC: 	 Server base url is cmsweb.cern.ch
+DEBUG 2019-11-16 09:56:22.448 UTC: 	 Command url /crabserver/prod/workflow
+DEBUG 2019-11-16 09:56:22.449 UTC: 	 Started submission
+DEBUG 2019-11-16 09:56:22.449 UTC: 	 Working on /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/VAJets/PKUTreeMaker/test/crab_WAJJ-1
+DEBUG 2019-11-16 09:56:22.649 UTC: 	 Loading required information from the environment
+DEBUG 2019-11-16 09:56:22.649 UTC: 	 Found CMSSW_9_4_9 for slc6_amd64_gcc630 with base /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9
+DEBUG 2019-11-16 09:56:22.649 UTC: 	 Loading required information from the environment
+DEBUG 2019-11-16 09:56:22.649 UTC: 	 Found CMSSW_9_4_9 for slc6_amd64_gcc630 with base /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9
+DEBUG 2019-11-16 09:56:22.673 UTC: 	 UNIQUE NAME: tarUUID b9fdd2ea-9244-4732-b622-aba7cf811429 
+DEBUG 2019-11-16 09:56:22.674 UTC: 	 self.config: from WMCore.Configuration import Configuration
+config = Configuration()
+config.section_('General')
+config.General.transferLogs = True
+config.General.requestName = 'WAJJ-1'
+config.section_('JobType')
+config.JobType.psetName = 'analysis.py'
+config.JobType.pluginName = 'Analysis'
+config.JobType.inputFiles = ['Summer16_23Sep2016V4_MC_L1FastJet_AK4PFchs.txt', 'Summer16_23Sep2016V4_MC_L2Relative_AK4PFchs.txt', 'Summer16_23Sep2016V4_MC_L3Absolute_AK4PFchs.txt', 'Summer16_23Sep2016V4_MC_L1FastJet_AK4PFPuppi.txt', 'Summer16_23Sep2016V4_MC_L2Relative_AK4PFPuppi.txt', 'Summer16_23Sep2016V4_MC_L3Absolute_AK4PFPuppi.txt']
+config.JobType.allowUndistributedCMSSW = True
+config.section_('Data')
+config.Data.inputDataset = '/LNuAJJ_EWK_MJJ-120_13TeV-madgraph-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM'
+config.Data.outputDatasetTag = 'WAJJ-1'
+config.Data.totalUnits = -1
+config.Data.unitsPerJob = 1
+config.Data.inputDBS = 'global'
+config.Data.splitting = 'FileBased'
+config.Data.outLFNDirBase = '/store/group/phys_jetmet/qihuang/'
+config.Data.publication = False
+config.section_('Site')
+config.Site.storageSite = 'T2_CH_CERN'
+
+DEBUG 2019-11-16 09:56:22.674 UTC: 	 self.config.JobType.psetName: analysis.py
+INFO 2019-11-16 09:56:22.674 UTC: 	 Importing CMSSW configuration analysis.py
+INFO 2019-11-16 09:56:23.199 UTC: 	 Finished importing CMSSW configuration analysis.py
+DEBUG 2019-11-16 09:56:23.199 UTC: 	 Writing CMSSW configuration to /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/VAJets/PKUTreeMaker/test/crab_WAJJ-1/inputs/PSet.py
+DEBUG 2019-11-16 09:56:23.283 UTC: 	 The following EDM output files will be collected: []
+DEBUG 2019-11-16 09:56:23.283 UTC: 	 The following TFile output files will be collected: ['treePKU.root']
+DEBUG 2019-11-16 09:56:23.283 UTC: 	 The following user output files (not listed as PoolOuputModule or TFileService in the CMSSW PSet) will be collected: 
+DEBUG 2019-11-16 09:56:23.283 UTC: 	 Loading required information from the environment
+DEBUG 2019-11-16 09:56:23.283 UTC: 	 Found CMSSW_9_4_9 for slc6_amd64_gcc630 with base /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9
+DEBUG 2019-11-16 09:56:23.283 UTC: 	 Making tarball in /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/VAJets/PKUTreeMaker/test/crab_WAJJ-1/inputs/b9fdd2ea-9244-4732-b622-aba7cf811429default.tgz
+DEBUG 2019-11-16 09:56:23.313 UTC: 	 Checking directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/lib
+DEBUG 2019-11-16 09:56:23.313 UTC: 	 Adding directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/lib to tarball
+DEBUG 2019-11-16 09:56:28.293 UTC: 	 Checking directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/biglib
+DEBUG 2019-11-16 09:56:28.293 UTC: 	 Adding directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/biglib to tarball
+DEBUG 2019-11-16 09:56:28.294 UTC: 	 Checking directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/module
+DEBUG 2019-11-16 09:56:28.300 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/DQMOffline/Trigger/data to tarball
+DEBUG 2019-11-16 09:56:28.303 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/DQMOffline/Trigger/interface to tarball
+DEBUG 2019-11-16 09:56:28.422 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/PhysicsTools/NanoAOD/interface to tarball
+DEBUG 2019-11-16 09:56:28.425 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/PhysicsTools/PatAlgos/interface to tarball
+DEBUG 2019-11-16 09:56:28.442 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/PhysicsTools/SelectorUtils/interface to tarball
+DEBUG 2019-11-16 09:56:28.452 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/PhysicsTools/PatUtils/data to tarball
+DEBUG 2019-11-16 09:56:29.186 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/PhysicsTools/PatUtils/interface to tarball
+DEBUG 2019-11-16 09:56:29.200 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/RecoEgamma/EgammaTools/data to tarball
+DEBUG 2019-11-16 09:56:29.363 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/RecoEgamma/EgammaTools/interface to tarball
+DEBUG 2019-11-16 09:56:29.375 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/RecoEgamma/ElectronIdentification/data to tarball
+DEBUG 2019-11-16 09:56:37.234 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/RecoEgamma/ElectronIdentification/interface to tarball
+DEBUG 2019-11-16 09:56:37.245 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/RecoEgamma/PhotonIdentification/data to tarball
+DEBUG 2019-11-16 09:56:44.053 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/RecoEgamma/PhotonIdentification/interface to tarball
+DEBUG 2019-11-16 09:56:44.296 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/RecoEgamma/EgammaElectronAlgos/interface to tarball
+DEBUG 2019-11-16 09:56:44.308 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/RecoParticleFlow/PFProducer/data to tarball
+DEBUG 2019-11-16 09:56:44.309 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/RecoParticleFlow/PFProducer/interface to tarball
+DEBUG 2019-11-16 09:56:44.323 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/JetMETCorrections/Type1MET/data to tarball
+DEBUG 2019-11-16 09:56:44.325 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/JetMETCorrections/Type1MET/interface to tarball
+DEBUG 2019-11-16 09:56:44.332 UTC: 	 Adding data directory /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/VAJets/PKUCommon/python/data to tarball
+DEBUG 2019-11-16 09:56:44.341 UTC: 	 Adding file Summer16_23Sep2016V4_MC_L1FastJet_AK4PFchs.txt to tarball
+DEBUG 2019-11-16 09:56:44.342 UTC: 	 Adding file Summer16_23Sep2016V4_MC_L2Relative_AK4PFchs.txt to tarball
+DEBUG 2019-11-16 09:56:44.346 UTC: 	 Adding file Summer16_23Sep2016V4_MC_L3Absolute_AK4PFchs.txt to tarball
+DEBUG 2019-11-16 09:56:44.347 UTC: 	 Adding file Summer16_23Sep2016V4_MC_L1FastJet_AK4PFPuppi.txt to tarball
+DEBUG 2019-11-16 09:56:44.348 UTC: 	 Adding file Summer16_23Sep2016V4_MC_L2Relative_AK4PFPuppi.txt to tarball
+DEBUG 2019-11-16 09:56:44.443 UTC: 	 Adding file Summer16_23Sep2016V4_MC_L3Absolute_AK4PFPuppi.txt to tarball
+DEBUG 2019-11-16 09:56:45.157 UTC: 	 Uploading archive /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/VAJets/PKUTreeMaker/test/crab_WAJJ-1/inputs/b9fdd2ea-9244-4732-b622-aba7cf811429default.tgz (64 MB) to the CRAB cache. Using URI https://cmsweb.cern.ch/crabcache
+DEBUG 2019-11-16 09:57:24.902 UTC: 	 Loading required information from the environment
+DEBUG 2019-11-16 09:57:24.903 UTC: 	 Found CMSSW_9_4_9 for slc6_amd64_gcc630 with base /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9
+DEBUG 2019-11-16 09:57:24.903 UTC: 	 Making tarball in /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/VAJets/PKUTreeMaker/test/crab_WAJJ-1/inputs/debugFiles.tgz
+DEBUG 2019-11-16 09:57:24.950 UTC: 	 Uploading archive /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/VAJets/PKUTreeMaker/test/crab_WAJJ-1/inputs/debugFiles.tgz (4 KB) to the CRAB cache. Using URI https://cmsweb.cern.ch/crabcache
+DEBUG 2019-11-16 09:57:25.076 UTC: 	 Result uploading input files: b5b6aa910962d4b0dc17d4452fcd10318fc7b68569d3a8970d0b49a941ab7d46.tar.gz 
+INFO 2019-11-16 09:57:25.076 UTC: 	 Sending the request to the server at cmsweb.cern.ch
+DEBUG 2019-11-16 09:57:25.077 UTC: 	 Submitting {'maxjobruntime': 1250, 'extrajdl': [], 'ignorelocality': 0, 'savelogsflag': 1, 'useparent': 0, 'asyncdest': 'T2_CH_CERN', 'algoargs': 1, 'cachefilename': 'b5b6aa910962d4b0dc17d4452fcd10318fc7b68569d3a8970d0b49a941ab7d46.tar.gz', 'numcores': 1, 'addoutputfiles': [], 'generator': 'pythia', 'maxmemory': 2000, 'publishdbsurl': 'https://cmsweb.cern.ch/dbs/prod/phys03/DBSWriter', 'priority': 10, 'jobsw': 'CMSSW_9_4_9', 'edmoutfiles': [], 'userfiles': [], 'primarydataset': '', 'inputdata': '/LNuAJJ_EWK_MJJ-120_13TeV-madgraph-pythia8/RunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1/MINIAODSIM', 'lfn': '/store/group/phys_jetmet/qihuang/', 'dryrun': 0, 'workflow': 'crab_WAJJ-1', 'cacheurl': u'https://cmsweb.cern.ch/crabcache', 'nonprodsw': 1, 'tfileoutfiles': ['treePKU.root'], 'oneEventMode': 0, 'debugfilename': '3078a5b47a67fbfe5a686aee3422647abae279a36332517e1201757a04819886.tar.gz', 'saveoutput': 1, 'publication': 0, 'jobarch': 'slc6_amd64_gcc630', 'totalunits': -1, 'splitalgo': 'FileBased', 'ignoreglobalblacklist': 0, 'nonvaliddata': 0, 'dbsurl': 'https://cmsweb.cern.ch/dbs/prod/global/DBSReader', 'publishgroupname': 0, 'jobtype': 'Analysis', 'publishname2': 'WAJJ-1'} 
+DEBUG 2019-11-16 09:57:25.077 UTC: 	 Encoded submit request: maxjobruntime=1250&ignorelocality=0&savelogsflag=1&useparent=0&asyncdest=T2_CH_CERN&algoargs=1&cachefilename=b5b6aa910962d4b0dc17d4452fcd10318fc7b68569d3a8970d0b49a941ab7d46.tar.gz&numcores=1&generator=pythia&maxmemory=2000&publishdbsurl=https%3A%2F%2Fcmsweb.cern.ch%2Fdbs%2Fprod%2Fphys03%2FDBSWriter&priority=10&jobsw=CMSSW_9_4_9&primarydataset=&inputdata=%2FLNuAJJ_EWK_MJJ-120_13TeV-madgraph-pythia8%2FRunIISummer16MiniAODv3-PUMoriond17_94X_mcRun2_asymptotic_v3-v1%2FMINIAODSIM&lfn=%2Fstore%2Fgroup%2Fphys_jetmet%2Fqihuang%2F&dryrun=0&workflow=crab_WAJJ-1&cacheurl=https%3A%2F%2Fcmsweb.cern.ch%2Fcrabcache&nonprodsw=1&oneEventMode=0&debugfilename=3078a5b47a67fbfe5a686aee3422647abae279a36332517e1201757a04819886.tar.gz&saveoutput=1&publication=0&jobarch=slc6_amd64_gcc630&totalunits=-1&splitalgo=FileBased&ignoreglobalblacklist=0&nonvaliddata=0&dbsurl=https%3A%2F%2Fcmsweb.cern.ch%2Fdbs%2Fprod%2Fglobal%2FDBSReader&publishgroupname=0&jobtype=Analysis&publishname2=WAJJ-1&tfileoutfiles=treePKU.root
+DEBUG 2019-11-16 09:57:25.286 UTC: 	 Result: {u'result': [{u'RequestName': u'191116_095725:qihuang_crab_WAJJ-1'}]}
+INFO 2019-11-16 09:57:25.289 UTC: 	 Success: Your task has been delivered to the prod CRAB3 server.
+INFO 2019-11-16 09:57:25.290 UTC: 	 Task name: 191116_095725:qihuang_crab_WAJJ-1
+INFO 2019-11-16 09:57:25.290 UTC: 	 Project dir: ./crab_WAJJ-1
+INFO 2019-11-16 09:57:25.290 UTC: 	 Please use 'crab status -d ./crab_WAJJ-1' to check how the submission process proceeds.
+DEBUG 2019-11-16 09:57:25.290 UTC: 	 About to return
+INFO 2019-11-16 09:57:25.294 UTC: 	 Log file is /afs/cern.ch/work/q/qihuang/WAVBS/jesr/CMSSW_9_4_9/src/VAJets/PKUTreeMaker/test/crab_WAJJ-1/crab.log
