@@ -119,7 +119,6 @@ void MuonIdSelector::produce(edm::Event& iEvent,const edm::EventSetup& iSetup)
 //  iEvent.getByLabel("offlineSlimmedPrimaryVertices", vtxs);
 
  
-//  std::auto_ptr<std::vector<pat::Muon> > passingMuons(new std::vector<pat::Muon >);
   std::unique_ptr<std::vector<pat::Muon> > passingMuons(new std::vector<pat::Muon >);
 
   edm::Handle<pat::MuonCollection > muons;
@@ -169,7 +168,7 @@ void MuonIdSelector::produce(edm::Event& iEvent,const edm::EventSetup& iSetup)
 //  if(mu1.pt()>20 && fabs(mu1.eta())<2.4 && mu1.isGlobalMuon() && mu1.isPFMuon() && fabs(isolation)<0.25 && fabs(d0vtx)<0.2 && fabs(dzvtx)<0.5 && !((mu1.globalTrack()->normalizedChi2())<10 && (mu1.globalTrack()->hitPattern().numberOfValidMuonHits())>0 && (mu1.numberOfMatchedStations())>1 && (mu1.innerTrack()->hitPattern().numberOfValidPixelHits()) > 0 && (mu1.innerTrack()->hitPattern().trackerLayersWithMeasurement())>5 && fabs(isolation)<0.15)) { isTight = true;}
 //  if(mu1.pt()>20 && fabs(mu1.eta())<2.4  && (mu1.isGlobalMuon() || mu1.isTrackerMuon()) && mu1.isPFMuon() && fabs(d0vtx)<0.2 && fabs(dzvtx)<0.5 && isolation>0.25 && isolation<5) { isTight = true;}
 
-  if(mu1.pt()>20 && fabs(mu1.eta())<2.4  && (mu1.isGlobalMuon() || mu1.isTrackerMuon()) && mu1.isPFMuon() && fabs(isolation)<0.25) { isLoose = true;}
+  if(mu1.pt()>10 && fabs(mu1.eta())<2.4  && (mu1.isGlobalMuon() || mu1.isTrackerMuon()) && mu1.isPFMuon() && fabs(isolation)<0.25) { isLoose = true;}
 
     /// ------- Finally apply selection --------
     if(applyTightID_ && isTight)   isPassing[iMu]= true;
@@ -194,7 +193,6 @@ void MuonIdSelector::produce(edm::Event& iEvent,const edm::EventSetup& iSetup)
   nPassed_+=passingMuons->size();
 
   delete [] isPassing;  
-//  iEvent.put(passingMuons);
   iEvent.put(std::move(passingMuons));
 
 }

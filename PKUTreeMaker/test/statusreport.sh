@@ -1,7 +1,3 @@
-crab status -d crab_DY-1
-crab status -d crab_DY-2
-crab status -d crab_DY-3
-crab status -d crab_DY-4
 crab status -d crab_STs-1
 crab status -d crab_STt-1
 crab status -d crab_STtbar-1
@@ -26,3 +22,8 @@ crab status -d crab_ZA-1
 #crab status -d crab_ZA-private
 #crab status -d crab_W3Jets-1
 #crab status -d crab_W3Jets-2
+crab status -d crab_DY-1
+crab status -d crab_DY-2
+crab status -d crab_DY-3
+crab status -d crab_DY-4
+

@@ -139,9 +139,9 @@ private:
     edm::EDGetTokenT<edm::ValueMap<float>> phoChargedIsolationToken_;
     edm::EDGetTokenT<edm::ValueMap<float>> phoNeutralHadronIsolationToken_;
     edm::EDGetTokenT<edm::ValueMap<float>> phoPhotonIsolationToken_;
-    EffectiveAreas                         effAreaChHadrons_;
-    EffectiveAreas                         effAreaNeuHadrons_;
-    EffectiveAreas                         effAreaPhotons_;
+   // EffectiveAreas                         effAreaChHadrons_;
+   // EffectiveAreas                         effAreaNeuHadrons_;
+   // EffectiveAreas                         effAreaPhotons_;
 
     // ----------member data ---------------------------
     TTree* outTree_;
@@ -319,6 +319,7 @@ private:
     bool passFilter_badChargedHadron_;
 
     edm::EDGetTokenT<GenEventInfoProduct>            GenToken_;
+		edm::EDGetTokenT<reco::GenJetCollection> genJet_;
     edm::EDGetTokenT<std::vector<PileupSummaryInfo>> PUToken_;
     edm::EDGetTokenT<edm::View<reco::Candidate>>     leptonicVSrc_;
     edm::EDGetTokenT<edm::View<pat::Jet>>            ak4jetsSrc_;
@@ -386,7 +387,8 @@ float PKUTreeMaker::EApho(float x) {
 // constructors and destructor
 //
 PKUTreeMaker::PKUTreeMaker(const edm::ParameterSet& iConfig)  //:
-    : effAreaChHadrons_((iConfig.getParameter<edm::FileInPath>("effAreaChHadFile")).fullPath()), effAreaNeuHadrons_((iConfig.getParameter<edm::FileInPath>("effAreaNeuHadFile")).fullPath()), effAreaPhotons_((iConfig.getParameter<edm::FileInPath>("effAreaPhoFile")).fullPath()) {
+//    : effAreaChHadrons_((iConfig.getParameter<edm::FileInPath>("effAreaChHadFile")).fullPath()), effAreaNeuHadrons_((iConfig.getParameter<edm::FileInPath>("effAreaNeuHadFile")).fullPath()), effAreaPhotons_((iConfig.getParameter<edm::FileInPath>("effAreaPhoFile")).fullPath()) 
+{
     hltToken_ = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("hltToken"));
     elPaths1_ = iConfig.getParameter<std::vector<std::string>>("elPaths1");
     elPaths2_ = iConfig.getParameter<std::vector<std::string>>("elPaths2");
@@ -394,6 +396,7 @@ PKUTreeMaker::PKUTreeMaker(const edm::ParameterSet& iConfig)  //:
     muPaths2_ = iConfig.getParameter<std::vector<std::string>>("muPaths2");
     muPaths3_ = iConfig.getParameter<std::vector<std::string>>("muPaths3");
     GenToken_ = consumes<GenEventInfoProduct>(iConfig.getParameter<edm::InputTag>("generator"));
+	genJet_=consumes<reco::GenJetCollection>(iConfig.getParameter<edm::InputTag>("genJet"));
     //  LheToken_=consumes<LHEEventProduct> (iConfig.getParameter<edm::InputTag>( "lhe") ) ;
     PUToken_         = consumes<std::vector<PileupSummaryInfo>>(iConfig.getParameter<edm::InputTag>("pileup"));
     leptonicVSrc_    = consumes<edm::View<reco::Candidate>>(iConfig.getParameter<edm::InputTag>("leptonicVSrc"));
@@ -1077,6 +1080,8 @@ void PKUTreeMaker::addTypeICorr_user(edm::Event const& event) {
     double corrEx_JER_down    = 0;
     double corrEy_JER_down    = 0;
     double corrSumEt_JER_down = 0;
+
+
     for (const pat::Jet& jet : *jets_) {
         corrEx_JEC += jet.userFloat("corrEx_MET_JEC");
         corrEy_JEC += jet.userFloat("corrEy_MET_JEC");
@@ -1539,6 +1544,20 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         }
     }
 
+	if(RunOnMC_){
+		int ijj=0;
+		edm::Handle<reco::GenJetCollection> genJets;
+		iEvent.getByToken(genJet_,genJets);
+		reco::GenJetCollection::const_iterator i_jet;
+		for( i_jet=genJets->begin(); i_jet != genJets->end();i_jet++){
+			genjet_e[ijj] = i_jet->energy();
+			genjet_pt[ijj]= i_jet->pt();
+			genjet_eta[ijj]= i_jet->eta();
+			genjet_phi[ijj]=i_jet->phi();
+			ijj++;
+		}
+	}
+
     edm::Handle<edm::View<pat::Muon>> loosemus;
     iEvent.getByToken(loosemuonToken_, loosemus);
     edm::Handle<edm::View<pat::Electron>> looseeles;
@@ -1614,6 +1633,8 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 			//         const float  rawPt    = met.shiftedPt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
 			//         const float  rawPhi   = met.shiftedPhi(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
 			//         const float  rawSumEt = met.shiftedSumEt(pat::MET::METUncertainty::NoShift, pat::MET::METUncertaintyLevel::Raw);
+
+
 			const float rawPt = met.uncorPt();
 			const float rawPhi = met.uncorPhi();
 			const float rawSumEt = met.uncorSumEt();
@@ -1841,10 +1862,15 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         double phosc_eta = pho->superCluster()->eta();
         double phosc_phi = pho->superCluster()->phi();
 
-        double pho_ieie = (*full5x5SigmaIEtaIEtaMap)[pho];
-        double chIso1   = (*phoChargedIsolationMap)[pho];
-        double nhIso1   = (*phoNeutralHadronIsolationMap)[pho];
-        double phIso1   = (*phoPhotonIsolationMap)[pho];
+//        double pho_ieie = (*full5x5SigmaIEtaIEtaMap)[pho];
+//        double chIso1   = (*phoChargedIsolationMap)[pho];
+//        double nhIso1   = (*phoNeutralHadronIsolationMap)[pho];
+//        double phIso1   = (*phoPhotonIsolationMap)[pho];
+
+         double pho_ieie = (*photons)[ip].full5x5_sigmaIetaIeta();
+         double chIso1 = (*photons)[ip].userFloat("phoChargedIsolation");
+         double nhIso1 = (*photons)[ip].userFloat("phoNeutralHadronIsolation");
+         double phIso1 = (*photons)[ip].userFloat("phoPhotonIsolation");
         /*
             double chiso=std::max(0.0, chIso1 - rhoVal_*EAch(fabs((*photons)[ip].eta()))); //effAreaChHadrons_.getEffectiveArea(fabs(phosc_eta)));
 //            double chiso=std::max((*photons)[ip].chargedHadronIso()-rhoVal_*EAch(fabs((*photons)[ip].eta())),0.0);
@@ -2030,6 +2056,7 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     double                       tmpjetptcut = 20.0;
     std::vector<TLorentzVector*> jets;
 
+
     //################Jet Correction##########################
     //two leading jets without JER
     for (size_t ik = 0; ik < ak4jets->size(); ik++) {
@@ -2060,6 +2087,8 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         }
     }
     // two leading jets with JER
+
+
     std::vector<TLorentzVector*> jets_new;
     for (size_t ik = 0; ik < ak4jets->size(); ik++) {
         reco::Candidate::LorentzVector uncorrJet = (*ak4jets)[ik].correctedP4(0);
@@ -2076,6 +2105,7 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     //////----------------------------------------------
     //------------- jet pt energy JEC up uncertaity
     //////----------------------------------------------
+
     std::vector<TLorentzVector*> jets_JEC_up;
     for (size_t ik = 0; ik < ak4jets->size(); ik++) {
         reco::Candidate::LorentzVector uncorrJet = (*ak4jets)[ik].correctedP4(0);
@@ -2092,6 +2122,8 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     //////----------------------------------------------
     ////------------- jet pt energy JEC down uncertaity
     ////////----------------------------------------------
+
+
     std::vector<TLorentzVector*> jets_JEC_down;
     for (size_t ik = 0; ik < ak4jets->size(); ik++) {
         reco::Candidate::LorentzVector uncorrJet = (*ak4jets)[ik].correctedP4(0);
@@ -2108,6 +2140,8 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     //////----------------------------------------------
     ////------------- jet pt energy JER up uncertaity
     ////////----------------------------------------------
+
+
     std::vector<TLorentzVector*> jets_JER_up;
     for (size_t ik = 0; ik < ak4jets->size(); ik++) {
         reco::Candidate::LorentzVector uncorrJet = (*ak4jets)[ik].correctedP4(0);
@@ -2124,6 +2158,7 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
     //////----------------------------------------------
     ////------------- jet pt energy JER down uncertaity
     ////////----------------------------------------------
+
     std::vector<TLorentzVector*> jets_JER_down;
     for (size_t ik = 0; ik < ak4jets->size(); ik++) {
         reco::Candidate::LorentzVector uncorrJet = (*ak4jets)[ik].correctedP4(0);
@@ -2203,6 +2238,7 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         }
     }
 
+
     //two leading jets, JEC up
     for (size_t i = 0; i < jets_JEC_up.size(); i++) {
         if (iphoton > -1) {
@@ -2259,6 +2295,7 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             }
         }
     }
+
     //two leading jets, JER up
     for (size_t i = 0; i < jets_JER_up.size(); i++) {
         if (iphoton > -1) {
@@ -2314,6 +2351,8 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             }
         }
     }
+
+
     // variable concerning jet, old
     if (jetindexphoton12[0] > -1 && jetindexphoton12[1] > -1) {
 
@@ -2569,6 +2608,10 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         if(Dphiwajj_JER_down>Pi){Dphiwajj_JER_down=2.0*Pi-Dphiwajj_JER_down;}
         //	std::cout<<"Mjj_new "<<Mjj_new<<" Mjj_JEC_up "<<Mjj_JEC_up<<" Mjj_JEC_down "<<Mjj_JEC_down<<" Mjj_JER_up "<<Mjj_JER_up<<" Mjj_JER_down "<<Mjj_JER_down<<std::endl;
     }
+
+/*
+std::cout<<"begin process old jets _f !!!"<<std::endl;
+
     if (jetindexphoton12_f[0] > -1 && jetindexphoton12_f[1] > -1) {
 
         jet1hf_f   = (*ak4jets)[jetindexphoton12_f[0]].hadronFlavour();
@@ -2616,25 +2659,60 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             Dphiwajj_f = 2.0 * Pi - Dphiwajj_f;
         }
     }
+
+std::cout<<"begin process old jets _f new !!!"<<std::endl;
+
     if (jetindexphoton12_new_f[0] > -1 && jetindexphoton12_new_f[1] > -1) {
+
+std::cout<<"begin process old jets _f new array!!!"<<std::endl;
+
         jet1pt_new_f   = jets[jetindexphoton12_new_f[0]]->Pt();
+
+std::cout<<"begin process old jets _f new array2!!!"<<std::endl;
+
         jet1eta_new_f  = jets[jetindexphoton12_new_f[0]]->Eta();
+
+std::cout<<"begin process old jets _f new array3!!!"<<std::endl;
+
         jet1phi_new_f  = jets[jetindexphoton12_new_f[0]]->Phi();
+
+std::cout<<"begin process old jets _f new array4!!!"<<std::endl;
+
         jet1e_new_f    = jets[jetindexphoton12_new_f[0]]->E();
+
+std::cout<<"begin process old jets _f new array5!!!"<<std::endl;
+std::cout<<"jetindexphoton12_new_f[1]  "<<jetindexphoton12_new_f[1]<<std::endl;
+std::cout<<"  jets[jetindexphoton12_new_f[1]] pt  "<<jets[jetindexphoton12_new_f[1]]->Pt()<<std::endl;
         jet2pt_new_f   = jets[jetindexphoton12_new_f[1]]->Pt();
+
+std::cout<<"begin process old jets _f new array6!!!"<<std::endl;
+
         jet2eta_new_f  = jets[jetindexphoton12_new_f[1]]->Eta();
+
+std::cout<<"begin process old jets _f new array7!!!"<<std::endl;
+
         jet2phi_new_f  = jets[jetindexphoton12_new_f[1]]->Phi();
+
+std::cout<<"begin process old jets _f new array8!!!"<<std::endl;
+
         jet2e_new_f    = jets[jetindexphoton12_new_f[1]]->E();
+
+std::cout<<"begin process old jets _f new btag!!!"<<std::endl;
+
         jet1csv_new_f  = (*ak4jets)[jetindexphoton12_new_f[0]].bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");
         jet2csv_new_f  = (*ak4jets)[jetindexphoton12_new_f[1]].bDiscriminator("pfCombinedSecondaryVertexV2BJetTags");
         jet1icsv_new_f = (*ak4jets)[jetindexphoton12_new_f[0]].bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
         jet2icsv_new_f = (*ak4jets)[jetindexphoton12_new_f[1]].bDiscriminator("pfCombinedInclusiveSecondaryVertexV2BJetTags");
+
+std::cout<<"begin process old jets _f new dr"<<std::endl;
+
         drj1a_new_f    = deltaR(jet1eta_new_f, jet1phi_new_f, photoneta_f, photonphi_f);
         drj2a_new_f    = deltaR(jet2eta_new_f, jet2phi_new_f, photoneta_f, photonphi_f);
         drj1l_new_f    = deltaR(jet1eta_new_f, jet1phi_new_f, etalep1, philep1);
         drj2l_new_f    = deltaR(jet2eta_new_f, jet2phi_new_f, etalep1, philep1);
         //drj1l2_new_f   = deltaR(jet1eta_new_f, jet1phi_new_f, etalep2, philep2);
         //drj2l2_new_f   = deltaR(jet2eta_new_f, jet2phi_new_f, etalep2, philep2);
+
         TLorentzVector j1p4_f;
         j1p4_f.SetPtEtaPhiE(jet1pt_new_f, jet1eta_new_f, jet1phi_new_f, jet1e_new_f);
         TLorentzVector j2p4_f;
@@ -2643,6 +2721,9 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         photonp42_f.SetPtEtaPhiE(photonet_f, photoneta_f, photonphi_f, photone_f);
         TLorentzVector vp4_f;
         vp4_f.SetPtEtaPhiE(leptonicV.pt(), leptonicV.eta(), leptonicV.phi(), leptonicV.energy());
+
+std::cout<<"begin process old jets _f new phijmet!!!"<<std::endl;
+
         j1metPhi_new_f = fabs(jet1phi_new_f - MET_phi_new);
         if (j1metPhi_new_f > Pi) {
             j1metPhi_new_f = 2.0 * Pi - j1metPhi_new_f;
@@ -2652,9 +2733,15 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             j2metPhi_new_f = 2.0 * Pi - j2metPhi_new_f;
         }
         Mjj_new_f      = (j1p4_f + j2p4_f).M();
+
+std::cout<<"begin process old jets _f new deltaeta!!!"<<std::endl;
+
         deltaeta_new_f = fabs(jet1eta_new_f - jet2eta_new_f);
         zepp_new_f     = fabs((vp4_f + photonp42_f).Rapidity() - (j1p4_f.Rapidity() + j2p4_f.Rapidity()) / 2.0);
     }
+
+std::cout<<"begin process old jets _f jec up!!!"<<std::endl;
+
     if (jetindexphoton12_JEC_up_f[0] > -1 && jetindexphoton12_JEC_up_f[1] > -1) {
         jet1pt_JEC_up_f   = jets[jetindexphoton12_JEC_up_f[0]]->Pt();
         jet1eta_JEC_up_f  = jets[jetindexphoton12_JEC_up_f[0]]->Eta();
@@ -2694,6 +2781,9 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         deltaeta_JEC_up_f = fabs(jet1eta_JEC_up_f - jet2eta_JEC_up_f);
         zepp_JEC_up_f     = fabs((vp4_f + photonp42_f).Rapidity() - (j1p4_f.Rapidity() + j2p4_f.Rapidity()) / 2.0);
     }
+
+std::cout<<"begin process old jets _f jec down!!!"<<std::endl;
+
     if (jetindexphoton12_JEC_down_f[0] > -1 && jetindexphoton12_JEC_down_f[1] > -1) {
         jet1pt_JEC_down_f   = jets[jetindexphoton12_JEC_down_f[0]]->Pt();
         jet1eta_JEC_down_f  = jets[jetindexphoton12_JEC_down_f[0]]->Eta();
@@ -2733,6 +2823,9 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         deltaeta_JEC_down_f = fabs(jet1eta_JEC_down_f - jet2eta_JEC_down_f);
         zepp_JEC_down_f     = fabs((vp4_f + photonp42_f).Rapidity() - (j1p4_f.Rapidity() + j2p4_f.Rapidity()) / 2.0);
     }
+
+std::cout<<"begin process old jets _f jer up!!!"<<std::endl;
+
     if (jetindexphoton12_JER_up_f[0] > -1 && jetindexphoton12_JER_up_f[1] > -1) {
         jet1pt_JER_up_f   = jets[jetindexphoton12_JER_up_f[0]]->Pt();
         jet1eta_JER_up_f  = jets[jetindexphoton12_JER_up_f[0]]->Eta();
@@ -2772,6 +2865,9 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         deltaeta_JER_up_f = fabs(jet1eta_JER_up_f - jet2eta_JER_up_f);
         zepp_JER_up_f     = fabs((vp4_f + photonp42_f).Rapidity() - (j1p4_f.Rapidity() + j2p4_f.Rapidity()) / 2.0);
     }
+
+std::cout<<"begin process old jets _f jer down!!!"<<std::endl;
+
     if (jetindexphoton12_JER_down_f[0] > -1 && jetindexphoton12_JER_down_f[1] > -1) {
         jet1pt_JER_down_f   = jets[jetindexphoton12_JER_down_f[0]]->Pt();
         jet1eta_JER_down_f  = jets[jetindexphoton12_JER_down_f[0]]->Eta();
@@ -2811,9 +2907,12 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
         deltaeta_JER_down_f = fabs(jet1eta_JER_down_f - jet2eta_JER_down_f);
         zepp_JER_down_f     = fabs((vp4_f + photonp42_f).Rapidity() - (j1p4_f.Rapidity() + j2p4_f.Rapidity()) / 2.0);
     }
+*/
+
     outTree_->Fill();
     delete jecAK4_;
     jecAK4_ = 0;
+
 }
 
 //-------------------------------------------------------------------------------------------------------------------------------------//

@@ -145,7 +145,7 @@ private:
   double triggerWeight, lumiWeight, pileupWeight;
   double theWeight;
 double L1prefiring,L1prefiringup,L1prefiringdown;
-double pweight[671];
+double pweight[1113];  //671
   double  nump=0.;
   double  numm=0.;
   double  npT, npIT;
@@ -339,13 +339,6 @@ PKUTreeMaker::PKUTreeMaker(const edm::ParameterSet& iConfig)//:
   jetCorrLabel_ = jecAK4chsLabels_;
   offsetCorrLabel_.push_back(jetCorrLabel_[0]);
 
-//  L1 prefiring
-  prefweight_token = consumes< double >(edm::InputTag("prefiringweight:NonPrefiringProb"));
-  prefweightup_token = consumes< double >(edm::InputTag("prefiringweight:NonPrefiringProbUp"));
-  prefweightdown_token = consumes< double >(edm::InputTag("prefiringweight:NonPrefiringProbDown"));
-
-
-
 // filter
    noiseFilterToken_ = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("noiseFilter"));
    HBHENoiseFilter_Selector_ =  iConfig.getParameter<std::string> ("noiseFilterSelection_HBHENoiseFilter");
@@ -380,7 +373,7 @@ outTree_->Branch("nVtx"            ,&nVtx           ,"nVtx/I"           );
   outTree_->Branch("L1prefiring"           ,&L1prefiring         ,"L1prefiring/D"          );
   outTree_->Branch("L1prefiringup"           ,&L1prefiringup         ,"L1prefiringup/D"          );
   outTree_->Branch("L1prefiringdown"           ,&L1prefiringdown         ,"L1prefiringdown/D"          );
-outTree_->Branch("pweight"           ,pweight         ,"pweight[671]/D"          );
+outTree_->Branch("pweight"           ,pweight         ,"pweight[1113]/D"          );
   outTree_->Branch("nump"           ,&nump         ,"nump/D"          );
   outTree_->Branch("numm"           ,&numm         ,"numm/D"          );
   outTree_->Branch("npT"           ,&npT         ,"npT/D"          );
@@ -948,6 +941,7 @@ PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 
 //events weight
    if (RunOnMC_){
+
 //  L1 prefiring
 edm::Handle< double > theprefweight;
 iEvent.getByToken(prefweight_token, theprefweight ) ;
@@ -971,7 +965,7 @@ L1prefiringdown =(*theprefweightdown);
 	edm::Handle<LHEEventProduct> wgtsource;
 	iEvent.getByToken(LheToken_, wgtsource);
 	std::cout<<"weight number "<<wgtsource->weights().size()<<std::endl;
-        for ( int i=0; i<671; ++i) {
+        for ( int i=0; i<1113; ++i) {
                      pweight[i]= wgtsource->weights()[i].wgt/wgtsource->originalXWGTUP();
 		std::cout<<"weight= "<<pweight[i]<<std::endl;
                 }
@@ -1599,7 +1593,7 @@ L1prefiringdown = -99;
      MET_corrPx = -99;
      MET_corrPy = -99;
 
-	for(int j=0; j<671; j++){
+	for(int j=0; j<1113; j++){
 		pweight[j]=0.0;
 	}
 

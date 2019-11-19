@@ -148,7 +148,6 @@ void ElectronIdSelector::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
 //  iEvent.getByLabel("offlineBeamSpot", beamspot_h);
 //  const reco::BeamSpot &beamspot = *(beamspot_h.product());
 
-//  std::auto_ptr<std::vector<pat::Electron> > passingElectrons(new std::vector<pat::Electron >);
   std::unique_ptr<std::vector<pat::Electron> > passingElectrons(new std::vector<pat::Electron >);
 
 //  edm::Handle<edm::View<pat::Electron> > electrons;
@@ -265,17 +264,17 @@ void ElectronIdSelector::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
 //        ((isEB && mHits<=2 && isolation<0.175 && sigmaIEtaIEta<0.0115 && dPhiIn<0.228 && dEtaIn<0.00749 && hoe<0.356 && ooemoop<0.299  && fabs(d0vtx)<0.05 && fabs(dzvtx)<0.10 && !(mHits<=1 && isolation<0.0588 && sigmaIEtaIEta<0.00998 && dPhiIn<0.0816 && dEtaIn<0.00308 && hoe<0.0414 && ooemoop<0.0129)) ||
 //         (isEE && mHits<=3 && isolation<0.159 && sigmaIEtaIEta<0.037 && dPhiIn<0.213 && dEtaIn<0.00895 && hoe<0.211 && ooemoop<0.15  && fabs(d0vtx)<0.10 && fabs(dzvtx)<0.20 && !(mHits<=1 && isolation<0.0571 && sigmaIEtaIEta<0.0292 && dPhiIn<0.0394 && dEtaIn<0.00605 && hoe<0.0641 && ooemoop<0.0129)));
 
-    isMedium = (pt>20.)  &&
+    isMedium = (pt>10.)  &&
         (!vtxFitConversion) &&
         ((isEB && mHits<=1 && isolation<0.0695 && sigmaIEtaIEta<0.00998 && dPhiIn<0.103 && dEtaIn<0.00311 && hoe<0.253 && ooemoop<0.134 && fabs(d0vtx)<0.05 && fabs(dzvtx)<0.10) ||
          (isEE && mHits<=1 && isolation<0.0821 && sigmaIEtaIEta<0.0298 && dPhiIn<0.045 && dEtaIn<0.00609 && hoe<0.0878 && ooemoop<0.13 && fabs(d0vtx)<0.10 && fabs(dzvtx)<0.20));
 
-    isLoose = (pt>20.)  &&
+    isLoose = (pt>10.)  &&
          (!vtxFitConversion) &&
         ((isEB && mHits<=1 && isolation<0.0994 && sigmaIEtaIEta<0.011 && dPhiIn<0.222  && dEtaIn<0.00477  && hoe<0.298 && ooemoop<0.241 && fabs(d0vtx)<0.05 && fabs(dzvtx)<0.10) ||
          (isEE && mHits<=1 && isolation<0.107 && sigmaIEtaIEta<0.0314  && dPhiIn<0.213 && dEtaIn<0.00868 && hoe<0.101 && ooemoop<0.14 && fabs(d0vtx)<0.10 && fabs(dzvtx)<0.20));
 
-    isVeto = (pt>20.) && 
+    isVeto = (pt>10.) && 
          (!vtxFitConversion) &&
         ((isEB && mHits<=2 && isolation<0.175 && sigmaIEtaIEta<0.0115 && dPhiIn<0.228 && dEtaIn<0.00749 && hoe<0.356 && ooemoop<0.299  && fabs(d0vtx)<0.05 && fabs(dzvtx)<0.10 ) ||
          (isEE && mHits<=3 && isolation<0.159 && sigmaIEtaIEta<0.037 && dPhiIn<0.213 && dEtaIn<0.00895 && hoe<0.211 && ooemoop<0.15  && fabs(d0vtx)<0.10 && fabs(dzvtx)<0.20));
@@ -304,9 +303,7 @@ void ElectronIdSelector::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
   nPassed_+=passingElectrons->size();
 
   delete [] isPassing;  
-//  iEvent.put(passingElectrons);
   iEvent.put(std::move(passingElectrons));
-
 }
 
  

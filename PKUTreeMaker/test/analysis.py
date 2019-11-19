@@ -15,10 +15,12 @@ process.load("TrackPropagation.SteppingHelixPropagator.SteppingHelixPropagatorAl
 
 from Configuration.AlCa.GlobalTag import GlobalTag
 if runOnMC:
-   process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_TrancheIV_v8'
-#   process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_miniAODv2_v1'
+#   process.GlobalTag.globaltag = '80X_mcRun2_asymptotic_2016_TrancheIV_v8'
+   process.GlobalTag.globaltag = '94X_mcRun2_asymptotic_v3'
+#   process.GlobalTag.globaltag = '94X_mc2017_realistic_v17'
 elif not(runOnMC):
-   process.GlobalTag.globaltag = '80X_dataRun2_2016SeptRepro_v4'
+#   process.GlobalTag.globaltag = '80X_dataRun2_2016SeptRepro_v7'
+   process.GlobalTag.globaltag = '94X_dataRun2_v10'
 
 ##########			                                                             
 hltFiltersProcessName = 'RECO'
@@ -36,25 +38,12 @@ process.load("VAJets.PKUCommon.goodJets_cff")
 
 #for egamma smearing
 
-#from EgammaAnalysis.ElectronTools.regressionWeights_cfi import regressionWeights
-#process = regressionWeights(process)
-#process.load('EgammaAnalysis.ElectronTools.regressionApplication_cff')
-
-#process.load('Configuration.StandardSequences.Services_cff')
-#process.RandomNumberGeneratorService = cms.Service("RandomNumberGeneratorService",
-#   calibratedPatElectrons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
-#      engineName = cms.untracked.string('TRandom3'),
-#   ),
-#   calibratedPatPhotons  = cms.PSet( initialSeed = cms.untracked.uint32(81),
-#      engineName = cms.untracked.string('TRandom3'),
-#   ),
-#)
-#process.load('EgammaAnalysis.ElectronTools.calibratedPatElectronsRun2_cfi')
-#process.load('EgammaAnalysis.ElectronTools.calibratedPatPhotonsRun2_cfi')
-#process.calibratedPatElectrons.electrons = cms.InputTag("slimmedElectrons")
-#process.calibratedPatElectrons.isMC = cms.bool(runOnMC)
-#process.calibratedPatPhotons.photons = cms.InputTag('slimmedPhotons')
-#process.calibratedPatPhotons.isMC = cms.bool(runOnMC)
+#from RecoEgamma.EgammaTools.EgammaPostRecoTools import setupEgammaPostRecoSeq
+#setupEgammaPostRecoSeq(process,
+#                       era="2017-Nov17ReReco",
+#                       runVID=True,
+#                       runEnergyCorrections=True,#True: do egamma_modification
+#                       )
 
 #for egamma smearing
 
@@ -74,6 +63,7 @@ else:
       jetAlgo    = 'AK4PFPuppi'
 
 jer_era = "Summer16_23Sep2016V3_MC"
+#jer_era = "Fall17_17Nov2017_V32_MC"
 triggerResultsLabel      = "TriggerResults"
 triggerSummaryLabel      = "hltTriggerSummaryAOD"
 hltProcess = "HLT"
@@ -101,6 +91,16 @@ else:
           'Summer16_23Sep2016BCDV4_DATA_L3Absolute_AK4PFPuppi.txt',
           'Summer16_23Sep2016BCDV4_DATA_L2L3Residual_AK4PFPuppi.txt'
     ]
+
+
+from PhysicsTools.PatUtils.l1ECALPrefiringWeightProducer_cfi import l1ECALPrefiringWeightProducer
+process.prefiringweight = l1ECALPrefiringWeightProducer.clone(
+    DataEra = cms.string("2016BtoH"),   #("2017BtoF"), #Use 2016BtoH for 2016
+    UseJetEMPt = cms.bool(False),
+    PrefiringRateSystematicUncty = cms.double(0.2),
+    SkipWarnings = False)
+
+
 process.JetUserData = cms.EDProducer(
    'JetUserData',
    jetLabel          = cms.InputTag(jLabel),
@@ -151,6 +151,7 @@ process.leptonicVFilter = cms.EDFilter("CandViewCountFilter",
 
 
 process.leptonSequence = cms.Sequence(process.muSequence +
+#		                      process.egammaPostRecoSeq*process.slimmedElectrons*process.slimmedPhotons+
                                       process.eleSequence +
                                       process.leptonicVSequence +
                                       process.leptonicVSelector +
@@ -159,22 +160,20 @@ process.leptonSequence = cms.Sequence(process.muSequence +
 process.jetSequence = cms.Sequence(process.NJetsSequence)
 
 
-#process.load('RecoMET.METFilters.BadPFMuonFilter_cfi')
-#process.load("RecoMET.METFilters.BadChargedCandidateFilter_cfi")
-#process.BadPFMuonFilter.muons = cms.InputTag("slimmedMuons")
-#process.BadPFMuonFilter.PFCandidates = cms.InputTag("packedPFCandidates")
-#process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
-#process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
-#process.metfilterSequence = cms.Sequence(process.BadPFMuonFilter+process.BadChargedCandidateFilter)
+process.load('RecoMET.METFilters.BadPFMuonFilter_cfi')
+process.load("RecoMET.METFilters.BadChargedCandidateFilter_cfi")
+process.BadPFMuonFilter.muons = cms.InputTag("slimmedMuons")
+process.BadPFMuonFilter.PFCandidates = cms.InputTag("packedPFCandidates")
+process.BadChargedCandidateFilter.muons = cms.InputTag("slimmedMuons")
+process.BadChargedCandidateFilter.PFCandidates = cms.InputTag("packedPFCandidates")
+process.metfilterSequence = cms.Sequence(process.BadPFMuonFilter+process.BadChargedCandidateFilter)
 
 if chsorpuppi:
       ak4jecsrc = jecLevelsAK4chs
 else:
       ak4jecsrc = jecLevelsAK4puppi
 
-#process.load("RecoEgamma/PhotonIdentification/PhotonIDValueMapProducer_cfi")
-
-#process.load("RecoEgamma/PhotonIdentification/PhotonIDValueMapProducer.cc
+process.load("RecoEgamma/PhotonIdentification/PhotonIDValueMapProducer_cfi")
 #from PhysicsTools.PatUtils.tools.runMETCorrectionsAndUncertainties import runMetCorAndUncFromMiniAOD 
 ## Example 1: If you only want to re-correct MET and get the proper uncertainties [e.g. when updating JEC]
 #runMetCorAndUncFromMiniAOD(process,
@@ -192,6 +191,8 @@ else:
 #                                 UseJetEMPt = cms.bool(False), #can be set to true to use jet prefiring maps parametrized vs pt(em) instead of pt
 #                                 PrefiringRateSystematicUncty = cms.double(0.2) #Minimum relative prefiring uncty per object
 #                                 )
+
+
 process.treeDumper = cms.EDAnalyzer("PKUTreeMaker",
                                     originalNEvents = cms.int32(1),
                                     crossSectionPb = cms.double(1),
@@ -200,6 +201,7 @@ process.treeDumper = cms.EDAnalyzer("PKUTreeMaker",
                                     isGen = cms.bool(False),
 				    RunOnMC = cms.bool(runOnMC), 
                                     generator =  cms.InputTag("generator"),
+                                    genJet =  cms.InputTag("slimmedGenJets"),
                                     lhe =  cms.InputTag("externalLHEProducer"),  #for multiple weight
                                     pileup  =   cms.InputTag("slimmedAddPileupInfo"),  
                                     leptonicVSrc = cms.InputTag("leptonicV"),
@@ -240,12 +242,9 @@ process.treeDumper = cms.EDAnalyzer("PKUTreeMaker",
                                     phoChargedIsolation = cms.InputTag("photonIDValueMapProducer:phoChargedIsolation"),
                                     phoNeutralHadronIsolation = cms.InputTag("photonIDValueMapProducer:phoNeutralHadronIsolation"),
                                     phoPhotonIsolation = cms.InputTag("photonIDValueMapProducer:phoPhotonIsolation"),
-#                                    effAreaChHadFile = cms.FileInPath("RecoEgamma/PhotonIdentification/data/Spring16/effAreaPhotons_cone03_pfChargedHadrons_90percentBased.txt"),
-#                                    effAreaNeuHadFile= cms.FileInPath("RecoEgamma/PhotonIdentification/data/Spring16/effAreaPhotons_cone03_pfNeutralHadrons_90percentBased.txt"),
-#                                    effAreaPhoFile   = cms.FileInPath("RecoEgamma/PhotonIdentification/data/Spring16/effAreaPhotons_cone03_pfPhotons_90percentBased.txt")
-                                    effAreaChHadFile = cms.FileInPath("RecoEgamma/PhotonIdentification/data/Spring15/effAreaPhotons_cone03_pfChargedHadrons_25ns_NULLcorrection.txt"),
-                                    effAreaNeuHadFile= cms.FileInPath("RecoEgamma/PhotonIdentification/data/Spring15/effAreaPhotons_cone03_pfNeutralHadrons_25ns_90percentBased.txt"),
-                                    effAreaPhoFile   = cms.FileInPath("RecoEgamma/PhotonIdentification/data/Spring15/effAreaPhotons_cone03_pfPhotons_25ns_90percentBased.txt")
+                                    effAreaChHadFile = cms.FileInPath("RecoEgamma/PhotonIdentification/data/Fall17/effAreaPhotons_cone03_pfChargedHadrons_90percentBased_V2.txt"),
+                                    effAreaNeuHadFile= cms.FileInPath("RecoEgamma/PhotonIdentification/data/Fall17/effAreaPhotons_cone03_pfNeutralHadrons_90percentBased.txt"),
+                                    effAreaPhoFile   = cms.FileInPath("RecoEgamma/PhotonIdentification/data/Fall17/effAreaPhotons_cone03_pfPhotons_90percentBased.txt")
                                     )
 
 process.analysis = cms.Path(
@@ -253,11 +252,11 @@ process.analysis = cms.Path(
 			    process.JetUserData +
                             process.leptonSequence +
                             process.jetSequence +
-#                            process.metfilterSequence +
+                            process.metfilterSequence + #*process.treeDumper)
+                            process.prefiringweight*process.treeDumper)
 #                           process.photonSequence +
-			    process.treeDumper
-)
-#                            process.photonIDValueMapProducer*process.treeDumper)
+#                            process.photonIDValueMapProducer*process.treeDumper
+
 #                            process.photonIDValueMapProducer*process.treeDumper)
 ### Source
 process.load("VAJets.PKUCommon.data.RSGravitonToWW_kMpl01_M_1000_Tune4C_13TeV_pythia8")
@@ -266,12 +265,12 @@ process.source.fileNames = [
 #"/store/mc/RunIISummer16MiniAODv2/WGToLNuG_01J_5f_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/40000/A0C1C471-E704-E811-A1F2-008CFAF292B0.root"   #root://cms-xrd-global.cern.ch/
 #"/store/mc/RunIISummer16MiniAODv2/WJetsToLNu_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext2-v2/00000/EC2D608D-622A-E711-A658-002590D9D984.root"
 #"/store/mc/RunIISummer16MiniAODv2/WGJJToLNuGJJ_EWK_aQGC-FS-FM_TuneCUETP8M1_13TeV-madgraph-pythia8/MINIAODSIM/PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/70000/F205A9E7-0BCE-E611-8617-008CFA5D275C.root"
-"file:/afs/cern.ch/user/m/melu/public/041A166C-B53F-E611-BF34-5CB90179CCC0.root"
-#"file:/eos/user/j/jixiao/4E985E55-ED20-E711-AF99-002590D60036.root"
+"/store/mc/RunIISummer16MiniAODv3/WGToLNuG_01J_5f_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/70000/FADCF3F9-6247-E911-A86D-EC0D9A80980A.root"
 ]
-process.maxEvents.input = 100
+
+process.maxEvents.input = -1
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
-process.MessageLogger.cerr.FwkReport.reportEvery = 200
+process.MessageLogger.cerr.FwkReport.reportEvery = 10
 process.MessageLogger.cerr.FwkReport.limit = 99999999
 
 process.TFileService = cms.Service("TFileService",

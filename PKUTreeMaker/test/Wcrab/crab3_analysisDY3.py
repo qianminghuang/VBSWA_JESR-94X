@@ -18,8 +18,8 @@ config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
 config.Data.unitsPerJob = 2
 config.Data.totalUnits = -1
-config.Data.outLFNDirBase = '/store/group/phys_jetmet/qihuang/'
-#config.Data.outLFNDirBase = '/store/user/qihuang/'
+#config.Data.outLFNDirBase = '/store/group/phys_jetmet/qihuang/'
+config.Data.outLFNDirBase = '/store/user/qihuang/'
 config.Data.publication = False
 config.Data.outputDatasetTag = 'DY-3'
 

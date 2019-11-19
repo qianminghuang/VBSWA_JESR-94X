@@ -155,7 +155,7 @@ double JetUserData::get_JER_corr(float JERSF, bool isMC, pat::Jet jet, double co
 		}
 		if (!isGenMatched && JERSF>1) {
 			double sigma = std::sqrt(JERSF * JERSF - 1) * PtResolution;
-			rnd_.SetSeed(3);
+			//rnd_.SetSeed(3);
 			JER_corrFactor = 1 + rnd_.Gaus(0, sigma);
 		}
 	}
@@ -187,8 +187,7 @@ void JetUserData::produce( edm::Event& iEvent, const edm::EventSetup& iSetup) {
 
 	edm::Handle<std::vector<pat::Jet> > jetHandle, packedjetHandle;
 	iEvent.getByToken(jLabel_, jetHandle);
-//	auto_ptr<vector<pat::Jet> > jetColl( new vector<pat::Jet> (*jetHandle) );
-        unique_ptr<vector<pat::Jet> > jetColl( new vector<pat::Jet> (*jetHandle) );
+	unique_ptr<vector<pat::Jet> > jetColl( new vector<pat::Jet> (*jetHandle) );
 
 	// JEC Uncertainty
 	edm::ESHandle<JetCorrectorParametersCollection> JetCorrParColl;
@@ -476,7 +475,7 @@ corrSumEt_MET_JER_down = std::hypot(corrEx_MET_JER_down,corrEy_MET_JER_down);
 
 	} //// Loop over all jets 
 
-	iEvent.put(std::move( jetColl ));
+	iEvent.put(std::move(jetColl));
 	delete jecAK4_;
 	jecAK4_=0;
 	delete jecOffset_;

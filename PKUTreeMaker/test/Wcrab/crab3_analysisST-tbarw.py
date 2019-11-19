@@ -15,7 +15,7 @@ config.section_("Data")
 config.Data.inputDataset = '/ST_tW_antitop_5f_inclusiveDecays_13TeV-powheg-pythia8_TuneCUETP8M1/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6_ext1-v1/MINIAODSIM'
 config.Data.inputDBS = 'global'
 config.Data.splitting = 'FileBased'
-config.Data.unitsPerJob = 5
+config.Data.unitsPerJob = 20
 config.Data.totalUnits = -1
 config.Data.outLFNDirBase = '/store/group/phys_jetmet/qihuang/'
 #config.Data.outLFNDirBase = '/store/user/qihuang/'

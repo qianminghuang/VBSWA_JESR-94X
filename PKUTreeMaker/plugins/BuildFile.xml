@@ -1,3 +1,4 @@
+<use name="JetMETCorrections/Modules"/>
 <use name="FWCore/Framework"/>
 <use name="FWCore/PluginManager"/>
 <use name="FWCore/ParameterSet"/>
@@ -10,8 +11,6 @@
 <use name="DataFormats/HepMCCandidate"/>
 <use name="CondFormats/JetMETObjects"/>
 <use name="JetMETCorrections/Objects"/>
-<use name="JetMETCorrections/Algorithms"/>
-<use name="JetMETCorrections/Modules"/>
 <use name="RecoEgamma/EgammaTools"/>
 <use name="HLTrigger/HLTcore"/>
 <use name="PhysicsTools/PatUtils"/>
@@ -21,6 +20,3 @@
 <use name="GeneratorInterface/LHEInterface"/>
 <use name="root"/>
 <flags EDM_PLUGIN="1"/>
-<export>
-   <lib name="1"/>
-</export>
