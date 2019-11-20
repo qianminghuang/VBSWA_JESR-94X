@@ -139,9 +139,9 @@ private:
     edm::EDGetTokenT<edm::ValueMap<float>> phoChargedIsolationToken_;
     edm::EDGetTokenT<edm::ValueMap<float>> phoNeutralHadronIsolationToken_;
     edm::EDGetTokenT<edm::ValueMap<float>> phoPhotonIsolationToken_;
-   // EffectiveAreas                         effAreaChHadrons_;
-   // EffectiveAreas                         effAreaNeuHadrons_;
-   // EffectiveAreas                         effAreaPhotons_;
+    EffectiveAreas                         effAreaChHadrons_;
+    EffectiveAreas                         effAreaNeuHadrons_;
+    EffectiveAreas                         effAreaPhotons_;
 
     // ----------member data ---------------------------
     TTree* outTree_;
@@ -332,62 +332,43 @@ private:
     edm::EDGetTokenT<edm::View<pat::Muon>>           t1muSrc_;
 };
 
-float PKUTreeMaker::EAch(float x) {
-    float EA = 0.0360;
-    if (x > 1.0)
-        EA = 0.0377;
-    if (x > 1.479)
-        EA = 0.0306;
-    if (x > 2.0)
-        EA = 0.0283;
-    if (x > 2.2)
-        EA = 0.0254;
-    if (x > 2.3)
-        EA = 0.0217;
-    if (x > 2.4)
-        EA = 0.0167;
-    return EA;
+float PKUTreeMaker::EAch( float x){
+        float EA = 0.0112;
+        if(x>1.0)   EA = 0.0108;
+        if(x>1.479) EA = 0.0106;
+        if(x>2.0)   EA = 0.01002;
+        if(x>2.2)   EA = 0.0098;
+        if(x>2.3)   EA = 0.0089;
+        if(x>2.4)   EA = 0.0087;
+        return EA;
 }
+float PKUTreeMaker::EAnh( float x){
+        float EA = 0.0668;
+        if(x>1.0)   EA = 0.1054;
+        if(x>1.479) EA = 0.0786;
+        if(x>2.0)   EA = 0.0233;
+        if(x>2.2)   EA = 0.0078;
+        if(x>2.3)   EA = 0.0028;
+        if(x>2.4)   EA = 0.0137;
 
-float PKUTreeMaker::EAnh(float x) {
-    float EA = 0.0597;
-    if (x > 1.0)
-        EA = 0.0807;
-    if (x > 1.479)
-        EA = 0.0629;
-    if (x > 2.0)
-        EA = 0.0197;
-    if (x > 2.2)
-        EA = 0.0184;
-    if (x > 2.3)
-        EA = 0.0284;
-    if (x > 2.4)
-        EA = 0.0591;
-    return EA;
+        return EA;
 }
-
-float PKUTreeMaker::EApho(float x) {
-    float EA = 0.1210;
-    if (x > 1.0)
-        EA = 0.1107;
-    if (x > 1.479)
-        EA = 0.0699;
-    if (x > 2.0)
-        EA = 0.1056;
-    if (x > 2.2)
-        EA = 0.1457;
-    if (x > 2.3)
-        EA = 0.1719;
-    if (x > 2.4)
-        EA = 0.1998;
-    return EA;
+float PKUTreeMaker::EApho( float x){
+        float EA = 0.1113;
+        if(x>1.0)   EA = 0.0953;
+        if(x>1.479) EA = 0.0619;
+        if(x>2.0)   EA = 0.0837;
+        if(x>2.2)   EA = 0.1070;
+        if(x>2.3)   EA = 0.1212;
+        if(x>2.4)   EA = 0.1466;
+        return EA;
 }
 
 //
 // constructors and destructor
 //
 PKUTreeMaker::PKUTreeMaker(const edm::ParameterSet& iConfig)  //:
-//    : effAreaChHadrons_((iConfig.getParameter<edm::FileInPath>("effAreaChHadFile")).fullPath()), effAreaNeuHadrons_((iConfig.getParameter<edm::FileInPath>("effAreaNeuHadFile")).fullPath()), effAreaPhotons_((iConfig.getParameter<edm::FileInPath>("effAreaPhoFile")).fullPath()) 
+    : effAreaChHadrons_((iConfig.getParameter<edm::FileInPath>("effAreaChHadFile")).fullPath()), effAreaNeuHadrons_((iConfig.getParameter<edm::FileInPath>("effAreaNeuHadFile")).fullPath()), effAreaPhotons_((iConfig.getParameter<edm::FileInPath>("effAreaPhoFile")).fullPath()) 
 {
     hltToken_ = consumes<edm::TriggerResults>(iConfig.getParameter<edm::InputTag>("hltToken"));
     elPaths1_ = iConfig.getParameter<std::vector<std::string>>("elPaths1");
@@ -1871,17 +1852,19 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
          double chIso1 = (*photons)[ip].userFloat("phoChargedIsolation");
          double nhIso1 = (*photons)[ip].userFloat("phoNeutralHadronIsolation");
          double phIso1 = (*photons)[ip].userFloat("phoPhotonIsolation");
-        /*
+        
             double chiso=std::max(0.0, chIso1 - rhoVal_*EAch(fabs((*photons)[ip].eta()))); //effAreaChHadrons_.getEffectiveArea(fabs(phosc_eta)));
 //            double chiso=std::max((*photons)[ip].chargedHadronIso()-rhoVal_*EAch(fabs((*photons)[ip].eta())),0.0);
             double nhiso=std::max(0.0, nhIso1 - rhoVal_*EAnh(fabs((*photons)[ip].eta()))); //effAreaNeuHadrons_.getEffectiveArea(fabs(phosc_eta)));
 //            double nhiso=std::max((*photons)[ip].neutralHadronIso()-rhoVal_*EAnh(fabs((*photons)[ip].eta())),0.0);
             double phoiso=std::max(0.0, phIso1 - rhoVal_*EApho(fabs((*photons)[ip].eta()))); //effAreaPhotons_.getEffectiveArea(fabs(phosc_eta)));
 //            double phoiso=std::max((*photons)[ip].photonIso()-rhoVal_*EApho(fabs((*photons)[ip].eta())),0.0);
-*/
+
+/*
         double chiso  = std::max(0.0, chIso1 - rhoVal_ * EAch(fabs(phosc_eta)));
         double nhiso  = std::max(0.0, nhIso1 - rhoVal_ * EAnh(fabs(phosc_eta)));
         double phoiso = std::max(0.0, phIso1 - rhoVal_ * EApho(fabs(phosc_eta)));
+*/
 
         int                                   ismedium_photon   = 0;
         int                                   ismedium_photon_f = 0;
@@ -1926,12 +1909,12 @@ void PKUTreeMaker::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
             photon_mva[ip] = (tp4 + fwp4).M();
         }
 
-        if (fabs(phosc_eta) < 1.4442 && (*photons)[ip].hadTowOverEm() < 0.0396 && photon_sieie[ip] < 0.01022 && chiso < 0.441 && nhiso < (2.725 + (0.0148 * (*photons)[ip].pt() + 0.000017 * (*photons)[ip].pt() * (*photons)[ip].pt())) && phoiso < (2.571 + 0.0047 * (*photons)[ip].pt())) {
-            ismedium_photon = 1;
-        }
-        if (fabs(phosc_eta) > 1.566 && fabs(phosc_eta) < 2.5 && (*photons)[ip].hadTowOverEm() < 0.0219 && photon_sieie[ip] < 0.03001 && chiso < 0.442 && nhiso < (1.715 + (0.0163 * (*photons)[ip].pt() + 0.000014 * (*photons)[ip].pt() * (*photons)[ip].pt())) && phoiso < (3.863 + 0.0034 * (*photons)[ip].pt())) {
-            ismedium_photon = 1;
-        }
+        //if (fabs(phosc_eta) < 1.4442 && (*photons)[ip].hadTowOverEm() < 0.0396 && photon_sieie[ip] < 0.01022 && chiso < 0.441 && nhiso < (2.725 + (0.0148 * (*photons)[ip].pt() + 0.000017 * (*photons)[ip].pt() * (*photons)[ip].pt())) && phoiso < (2.571 + 0.0047 * (*photons)[ip].pt())) {ismedium_photon = 1;}
+        //if (fabs(phosc_eta) > 1.566 && fabs(phosc_eta) < 2.5 && (*photons)[ip].hadTowOverEm() < 0.0219 && photon_sieie[ip] < 0.03001 && chiso < 0.442 && nhiso < (1.715 + (0.0163 * (*photons)[ip].pt() + 0.000014 * (*photons)[ip].pt() * (*photons)[ip].pt())) && phoiso < (3.863 + 0.0034 * (*photons)[ip].pt())) {ismedium_photon = 1;}
+
+        if (fabs(phosc_eta) < 1.4442 && (*photons)[ip].hadTowOverEm() < 0.02197 && photon_sieie[ip] < 0.01015 && chiso < 1.141 && nhiso < (1.189 + (0.01512 * (*photons)[ip].pt() + 0.00002259 * (*photons)[ip].pt() * (*photons)[ip].pt())) && phoiso < (2.08 + 0.004017 * (*photons)[ip].pt())) {ismedium_photon = 1;}
+        if (fabs(phosc_eta) > 1.566 && fabs(phosc_eta) < 2.5 && (*photons)[ip].hadTowOverEm() < 0.0326 && photon_sieie[ip] < 0.0272 && chiso < 1.051 && nhiso < (2.718 + (0.0117 * (*photons)[ip].pt() + 0.000023 * (*photons)[ip].pt() * (*photons)[ip].pt())) && phoiso < (3.867 + 0.0037 * (*photons)[ip].pt())) {ismedium_photon = 1;}
+
 
         if (ismedium_photon == 1 && deltaR(phosc_eta, phosc_phi, etalep1, philep1) > 0.5) {
             if (cachecount1 == 0) {

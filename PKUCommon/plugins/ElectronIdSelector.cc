@@ -176,6 +176,7 @@ void ElectronIdSelector::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
     bool isEE = ele.isEE() && fabs(eta) > 1.479 && fabs(eta) < 2.5;
     //bool inAcceptance = (isEB || isEE) && (ele.ecalDrivenSeed()==1);
     float pt  = ele.pt();
+    float energy = ele.superCluster()->energy();
 
     // -------- Compute Detector isolation ------
 //    const double PI = 4.0*atan(1.0);
@@ -252,8 +253,31 @@ void ElectronIdSelector::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
         ((isEB && mHits<=2 && isolation<0.126 && sigmaIEtaIEta<0.0114 && dPhiIn<0.216 && dEtaIn<0.0152 && hoe<0.181 && ooemoop<0.207  && fabs(d0vtx)<0.0564 && fabs(dzvtx)<0.472 ) ||
          (isEE && mHits<=3 && isolation<0.144 && sigmaIEtaIEta<0.0352 && dPhiIn<0.237 && dEtaIn<0.0113 && hoe<0.116 && ooemoop<0.174  && fabs(d0vtx)<0.222 && fabs(dzvtx)<0.921));
 */
+	//2016 data  94X MC
+    isTight = (pt>20.)  &&
+      (!vtxFitConversion) &&
+      ((isEB && mHits<=1 && isolation<0.0287+0.506/pt && sigmaIEtaIEta<0.0104 && dPhiIn<0.022 && dEtaIn<0.00255 && hoe<0.026+1.15/energy+0.0324*rhoVal_/energy && ooemoop<0.159 && fabs(d0vtx)<0.05 && fabs(dzvtx)<0.10 )  ||
+      (isEE && mHits<=1 && isolation<0.0445+0.963/pt && sigmaIEtaIEta<0.0353 && dPhiIn<0.0236 && dEtaIn<0.00501 && hoe<0.0188+2.06/energy + 0.183*rhoVal_/energy && ooemoop<0.0197 && fabs(d0vtx)<0.10 && fabs(dzvtx)<0.20));
 
-	//2016 data
+    isMedium = (pt>20.)  &&
+        (!vtxFitConversion) &&
+        ((isEB && mHits<=1 && isolation<0.0478+0.506/pt && sigmaIEtaIEta<0.0106 && dPhiIn<0.0547 && dEtaIn<0.0032 && hoe<0.046+1.16/energy+0.0324*rhoVal_/energy && ooemoop<0.184 && fabs(d0vtx)<0.05 && fabs(dzvtx)<0.10) ||
+         (isEE && mHits<=1 && isolation<0.0658+0.963/pt && sigmaIEtaIEta<0.0387 && dPhiIn<0.0394 && dEtaIn<0.00632 && hoe<0.0275+2.52/energy+0.183*rhoVal_/energy && ooemoop<0.0721 && fabs(d0vtx)<0.10 && fabs(dzvtx)<0.20));
+
+    isLoose = (pt>20.)  &&
+         (!vtxFitConversion) &&
+        ((isEB && mHits<=1 && isolation<0.112+0.506/pt && sigmaIEtaIEta<0.0112 && dPhiIn<0.0884  && dEtaIn<0.00377  && hoe<0.05+1.16/energy+0.0324*rhoVal_/energy && ooemoop<0.193 && fabs(d0vtx)<0.05 && fabs(dzvtx)<0.10) ||
+         (isEE && mHits<=1 && isolation<0.108+0.963/pt && sigmaIEtaIEta<0.0425  && dPhiIn<0.169 && dEtaIn<0.00674 && hoe<0.0441+2.54/energy+0.183*rhoVal_/energy && ooemoop<0.111 && fabs(d0vtx)<0.10 && fabs(dzvtx)<0.20));
+
+    isVeto = (pt>20.) &&
+         (!vtxFitConversion) &&
+        ((isEB && mHits<=2 && isolation<0.198+0.506/pt && sigmaIEtaIEta<0.0126 && dPhiIn<0.148 && dEtaIn<0.00463 && hoe<0.05+1.16/energy+0.0324*rhoVal_/energy && ooemoop<0.209 && fabs(d0vtx)<0.05 && fabs(dzvtx)<0.10 ) ||
+         (isEE && mHits<=3 && isolation<0.203+0.963/pt && sigmaIEtaIEta<0.0457 && dPhiIn<0.19 && dEtaIn<0.00814 && hoe<0.05+2.54/energy+0.183*rhoVal_/energy && ooemoop<0.132 && fabs(d0vtx)<0.10 && fabs(dzvtx)<0.20));
+
+
+
+/*
+	//2016 data    80X
     isTight = (pt>20.)  &&
       (!vtxFitConversion) &&
       ((isEB && mHits<=1 && isolation<0.0588 && sigmaIEtaIEta<0.00998 && dPhiIn<0.0816 && dEtaIn<0.00308 && hoe<0.0414 && ooemoop<0.0129 && fabs(d0vtx)<0.05 && fabs(dzvtx)<0.10 )  || (isEE && mHits<=1 && isolation<0.0571 && sigmaIEtaIEta<0.0292 && dPhiIn<0.0394 && dEtaIn<0.00605 && hoe<0.0641 && ooemoop<0.0129 && fabs(d0vtx)<0.10 && fabs(dzvtx)<0.20));
@@ -278,7 +302,7 @@ void ElectronIdSelector::produce(edm::Event& iEvent,const edm::EventSetup& iSetu
          (!vtxFitConversion) &&
         ((isEB && mHits<=2 && isolation<0.175 && sigmaIEtaIEta<0.0115 && dPhiIn<0.228 && dEtaIn<0.00749 && hoe<0.356 && ooemoop<0.299  && fabs(d0vtx)<0.05 && fabs(dzvtx)<0.10 ) ||
          (isEE && mHits<=3 && isolation<0.159 && sigmaIEtaIEta<0.037 && dPhiIn<0.213 && dEtaIn<0.00895 && hoe<0.211 && ooemoop<0.15  && fabs(d0vtx)<0.10 && fabs(dzvtx)<0.20));
-
+*/
 
     /// ------- Finally apply selection --------
     if(applyTightID_ && isTight)   isPassing[iElec]= true;
